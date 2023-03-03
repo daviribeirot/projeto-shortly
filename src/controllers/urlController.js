@@ -49,8 +49,7 @@ export async function goToUrl(req, res) {
         const data = urlExists.rows[0];
         
         await db.query(`UPDATE urls SET "visitCount" = $1 WHERE id = $2`, [data.visitCount + 1, data.id]);
-        
-        res.redirect(`https://${data.url}`);
+        res.redirect(data.url);
     } catch (error) {
         res.status(500).send(error.message);
     }
