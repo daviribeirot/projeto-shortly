@@ -21,3 +21,12 @@ export async function signUp(req, res) {
         res.status(500).send(error.message);
     }
 }
+
+export async function signIn(req, res) {
+
+    try {
+        
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
