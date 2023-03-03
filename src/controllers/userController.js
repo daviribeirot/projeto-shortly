@@ -24,8 +24,21 @@ export async function signUp(req, res) {
 
 export async function signIn(req, res) {
 
+    const {email, password} = req.body;
+
     try {
-        
+    const findUser = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
+    console.log(findUser.rows[0]);
+        if (!findUser.rowCount) return res.sendStatus(401);
+
+    const findPassword = await db.query(`SELECT * FROM users WHERE password = $1`, [password]);
+    
+        if (!findPassword.rowCount) return res.sendStatus(401);
+
+        const token = uuidV4(); 
+
+        await db.query(`INSERT INTO sessions ("userId", token) VALUES ($1, $2)`, [findUser.rows[0].id, token]);
+        res.send(token).status(200);
     } catch (error) {
         res.status(500).send(error.message);
     }
