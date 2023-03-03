@@ -18,8 +18,21 @@ export async function createUrl(req, res){
           });
 
     } catch (error) {
-        res.status(500).send(error.message)
+        res.status(500).send(error.message);
     }
+}
 
+export async function getUrlById(req,res){
 
+    const { id } = req.params;
+
+    try {
+       const url = await db.query(`SELECT * FROM urls WHERE id=$1`, [id]);
+
+       if (url.rowCount === 0) return res.sendStatus(404);
+
+        res.send(url.rows[0]).status(200);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 }

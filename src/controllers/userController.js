@@ -32,10 +32,6 @@ export async function signIn(req, res) {
 
         if (!user || !bcrypt.compareSync(password, user.password)) return res.sendStatus(401);
 
-    // const findPassword = await db.query(`SELECT * FROM users WHERE password = $1`, [password]);
-    
-    //     if (!findPassword.rowCount) return res.sendStatus(401);
-
         const token = uuidV4(); 
 
         await db.query(`INSERT INTO sessions ("userId", token) VALUES ($1, $2)`, [user.id, token]);
