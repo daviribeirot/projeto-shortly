@@ -39,7 +39,8 @@ export async function getUrlById(req, res) {
 
 export async function goToUrl(req, res) {
 
-    const { shortUrl } = req.params;
+    const  { shortUrl }  = req.params;
+    console.log(shortUrl);
 
     try {
         const url = await db.query(`SELECT FROM urls WHERE "shortUrl" = $1;`, [shortUrl]);
@@ -49,9 +50,8 @@ export async function goToUrl(req, res) {
         const data = url.rows[0];
 
         await db.query(`UPDATE urls SET "visitCount" = "visitCount" + 1 WHERE id = $1;`, [data.id]);
-        console.log(data)
 
-        res.redirect(data.url);
+        return res.redirect(data.url);
     } catch (error) {
         res.status(500).send(error.message);
     }
