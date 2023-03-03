@@ -10,5 +10,5 @@ urlRouter.post("/urls/shorten", sessionValidation, validateSchema(linkSchema), c
 urlRouter.get("/urls/:id", getUrlById);
 urlRouter.get("/urls/open/:shortUrl", goToUrl);
 urlRouter.delete("/urls/:id", sessionValidation, deleteUrl);
-urlRouter.get("/get/ranking", getRanking);
+urlRouter.get("/ranking", getRanking);
 export default urlRouter;

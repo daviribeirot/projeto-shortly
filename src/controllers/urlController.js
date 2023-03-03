@@ -40,18 +40,17 @@ export async function getUrlById(req, res) {
 export async function goToUrl(req, res) {
 
     const  { shortUrl }  = req.params;
-    console.log(shortUrl);
 
     try {
-        const url = await db.query(`SELECT FROM urls WHERE "shortUrl" = $1;`, [shortUrl]);
+        const urlExists = await db.query(`SELECT * FROM urls WHERE "shortUrl" = $1`, [shortUrl]);
 
-        if (url.rowCount === 0) return res.sendStatus(404);
+        if (urlExists.rowCount === 0) return res.sendStatus(404);
 
-        const data = url.rows[0];
-
-        await db.query(`UPDATE urls SET "visitCount" = "visitCount" + 1 WHERE id = $1;`, [data.id]);
-
-        return res.redirect(data.url);
+        const data = urlExists.rows[0];
+        
+        await db.query(`UPDATE urls SET "visitCount" = $1 WHERE id = $2`, [data.visitCount + 1, data.id]);
+        
+        res.redirect(`https://${data.url}`);
     } catch (error) {
         res.status(500).send(error.message);
     }
