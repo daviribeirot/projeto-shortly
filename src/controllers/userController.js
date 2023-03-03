@@ -30,11 +30,11 @@ export async function signIn(req, res) {
     const findUser = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
     const user = findUser.rows[0];
 
-        if (!findUser.rowCount) return res.sendStatus(401);
+        if (!user || !bcrypt.compareSync(password, user.password)) return res.sendStatus(401);
 
-    const findPassword = await db.query(`SELECT * FROM users WHERE password = $1`, [password]);
+    // const findPassword = await db.query(`SELECT * FROM users WHERE password = $1`, [password]);
     
-        if (!findPassword.rowCount) return res.sendStatus(401);
+    //     if (!findPassword.rowCount) return res.sendStatus(401);
 
         const token = uuidV4(); 
 
